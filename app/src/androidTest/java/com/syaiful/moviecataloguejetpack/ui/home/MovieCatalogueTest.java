@@ -1,12 +1,16 @@
 package com.syaiful.moviecataloguejetpack.ui.home;
 
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.rule.ActivityTestRule;
 
 import com.syaiful.moviecataloguejetpack.R;
 import com.syaiful.moviecataloguejetpack.data.MovieEntity;
 import com.syaiful.moviecataloguejetpack.utils.DummyData;
+import com.syaiful.moviecataloguejetpack.utils.EspressoIdlingResource;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -27,6 +31,16 @@ public class MovieCatalogueTest {
 
     @Rule
     public ActivityTestRule activityRule = new ActivityTestRule(HomeActivity.class);
+
+    @Before
+    public void setUp() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getEspressoIdlingResource());
+    }
+
+    @After
+    public void tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.getEspressoIdlingResource());
+    }
 
     @Test
     public void loadMovies() {

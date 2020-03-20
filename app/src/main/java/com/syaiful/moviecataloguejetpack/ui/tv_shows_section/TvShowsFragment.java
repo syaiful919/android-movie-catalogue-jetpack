@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.syaiful.moviecataloguejetpack.R;
 import com.syaiful.moviecataloguejetpack.data.MovieEntity;
+import com.syaiful.moviecataloguejetpack.viewmodel.ViewModelFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TvShowsFragment extends Fragment {
@@ -45,11 +47,16 @@ public class TvShowsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getActivity() != null) {
-            TvShowsViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(TvShowsViewModel.class);
-            List<MovieEntity> tvShow = viewModel.getTvShows();
+            ViewModelFactory factory = ViewModelFactory.getInstance(getActivity());
+            TvShowsViewModel viewModel = new ViewModelProvider(this, factory).get(TvShowsViewModel.class);
 
             TvShowsAdapter adapter = new TvShowsAdapter();
-            adapter.setTvShows(tvShow);
+            progressBar.setVisibility(View.VISIBLE);
+            viewModel.getTvShows().observe(this, tvShow -> {
+                progressBar.setVisibility(View.GONE);
+                adapter.setTvShows(tvShow);
+                adapter.notifyDataSetChanged();
+            });
 
             rvMovies.setLayoutManager(new LinearLayoutManager(getContext()));
             rvMovies.setHasFixedSize(true);

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.syaiful.moviecataloguejetpack.R;
 import com.syaiful.moviecataloguejetpack.data.MovieEntity;
+import com.syaiful.moviecataloguejetpack.viewmodel.ViewModelFactory;
 
 import java.util.List;
 
@@ -46,11 +47,17 @@ public class MoviesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getActivity() != null) {
-            MoviesViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MoviesViewModel.class);
-            List<MovieEntity> movies = viewModel.getMovies();
+            ViewModelFactory factory = ViewModelFactory.getInstance(getActivity());
+            MoviesViewModel viewModel = new ViewModelProvider(this, factory).get(MoviesViewModel.class);
 
             MoviesAdapter adapter = new MoviesAdapter();
-            adapter.setMovies(movies);
+            progressBar.setVisibility(View.VISIBLE);
+            viewModel.getMovies().observe(this, movies -> {
+                progressBar.setVisibility(View.GONE);
+                adapter.setMovies(movies);
+                adapter.notifyDataSetChanged();
+            });
+
 
             rvMovies.setLayoutManager(new LinearLayoutManager(getContext()));
             rvMovies.setHasFixedSize(true);
