@@ -9,14 +9,12 @@ public class MovieResponse implements Parcelable {
     private String title;
     private String description;
     private String posterPath;
-    private String type;
 
-    public MovieResponse(String _Id, String type, String title, String description, String posterPath) {
+    public MovieResponse(String _Id, String title, String description, String posterPath) {
         this.movieId = _Id;
         this.title = title;
         this.description = description;
         this.posterPath = posterPath;
-        this.type = type;
     }
 
 
@@ -25,7 +23,6 @@ public class MovieResponse implements Parcelable {
         title = in.readString();
         description = in.readString();
         posterPath = in.readString();
-        type = in.readString();
     }
 
     public static final Creator<MovieResponse> CREATOR = new Creator<MovieResponse>() {
@@ -39,14 +36,6 @@ public class MovieResponse implements Parcelable {
             return new MovieResponse[size];
         }
     };
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getId() {
         return movieId;
@@ -91,6 +80,5 @@ public class MovieResponse implements Parcelable {
         dest.writeString(title);
         dest.writeString(description);
         dest.writeString(posterPath);
-        dest.writeString(type);
     }
 }

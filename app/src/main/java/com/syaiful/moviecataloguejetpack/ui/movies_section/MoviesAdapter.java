@@ -13,11 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.syaiful.moviecataloguejetpack.R;
-import com.syaiful.moviecataloguejetpack.data.MovieEntity;
+import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.ui.detail_movie.DetailMovieActivity;
+import com.syaiful.moviecataloguejetpack.ui.detail_movie.DetailMovieViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.List;
+
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
     private List<MovieEntity> listMovies = new ArrayList<>();
@@ -67,7 +70,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
                     .into(imgPoster);
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(itemView.getContext(), DetailMovieActivity.class);
-                intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, movie);
+                intent.putExtra(DetailMovieActivity.EXTRA_TYPE, "movie");
+                intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, movie );
                 itemView.getContext().startActivity(intent);
             });
 

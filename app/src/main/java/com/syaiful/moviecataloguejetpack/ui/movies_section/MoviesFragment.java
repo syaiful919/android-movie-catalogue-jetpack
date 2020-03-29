@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,10 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.syaiful.moviecataloguejetpack.R;
-import com.syaiful.moviecataloguejetpack.data.MovieEntity;
 import com.syaiful.moviecataloguejetpack.viewmodel.ViewModelFactory;
-
-import java.util.List;
 
 
 public class MoviesFragment extends Fragment {
@@ -51,11 +49,26 @@ public class MoviesFragment extends Fragment {
             MoviesViewModel viewModel = new ViewModelProvider(this, factory).get(MoviesViewModel.class);
 
             MoviesAdapter adapter = new MoviesAdapter();
-            progressBar.setVisibility(View.VISIBLE);
+
             viewModel.getMovies().observe(this, movies -> {
-                progressBar.setVisibility(View.GONE);
-                adapter.setMovies(movies);
-                adapter.notifyDataSetChanged();
+                if(movies != null){
+                    switch (movies.status){
+                        case LOADING:
+                            progressBar.setVisibility(View.VISIBLE);
+                            break;
+                        case SUCCESS:
+                            if(movies.data != null){
+                                progressBar.setVisibility(View.GONE);
+                                adapter.setMovies(movies.data);
+                                adapter.notifyDataSetChanged();
+                            }
+                            break;
+                        case ERROR:
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
             });
 
 

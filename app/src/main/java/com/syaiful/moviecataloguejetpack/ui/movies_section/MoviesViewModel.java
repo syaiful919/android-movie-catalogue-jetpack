@@ -3,11 +3,10 @@ package com.syaiful.moviecataloguejetpack.ui.movies_section;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.syaiful.moviecataloguejetpack.data.MovieEntity;
+import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.data.source.MovieCatalogueRepository;
-import com.syaiful.moviecataloguejetpack.utils.DummyData;
+import com.syaiful.moviecataloguejetpack.vo.Resource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MoviesViewModel extends ViewModel {
@@ -16,7 +15,7 @@ public class MoviesViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public LiveData<ArrayList<MovieEntity>> getMovies() {
+    public LiveData<Resource<List<MovieEntity>>> getMovies() {
         return repository.getMovies();
     }
 }

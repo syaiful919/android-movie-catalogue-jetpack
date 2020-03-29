@@ -13,16 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.syaiful.moviecataloguejetpack.R;
-import com.syaiful.moviecataloguejetpack.data.MovieEntity;
+import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
+import com.syaiful.moviecataloguejetpack.data.source.local.entity.TvEntity;
 import com.syaiful.moviecataloguejetpack.ui.detail_movie.DetailMovieActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.List;
 
-public class TvShowsAdapter extends RecyclerView.Adapter<TvShowsAdapter.TvShowsAdapterViewHolder> {
-    private List<MovieEntity> listTvShows = new ArrayList<>();
+public class TvShowsAdapter extends RecyclerView.Adapter<TvShowsAdapter.TvShowsViewHolder> {
+    private List<TvEntity> listTvShows = new ArrayList<>();
 
-    void setTvShows(List<MovieEntity> listTvShows) {
+    void setTvShows(List<TvEntity> listTvShows) {
         if (listTvShows == null) return;
         this.listTvShows.clear();
         this.listTvShows.addAll(listTvShows);
@@ -30,14 +32,14 @@ public class TvShowsAdapter extends RecyclerView.Adapter<TvShowsAdapter.TvShowsA
 
     @NonNull
     @Override
-    public TvShowsAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TvShowsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_movie, parent, false);
-        return new TvShowsAdapterViewHolder(view);
+        return new TvShowsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TvShowsAdapterViewHolder holder, int position) {
-        MovieEntity tvShow = listTvShows.get(position);
+    public void onBindViewHolder(@NonNull TvShowsViewHolder holder, int position) {
+        TvEntity tvShow = listTvShows.get(position);
         holder.bind(tvShow);
     }
 
@@ -46,19 +48,19 @@ public class TvShowsAdapter extends RecyclerView.Adapter<TvShowsAdapter.TvShowsA
         return listTvShows.size();
     }
 
-    public class TvShowsAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class TvShowsViewHolder extends RecyclerView.ViewHolder {
         final TextView tvTitle;
         final TextView tvDescription;
         final ImageView imgPoster;
 
-        public TvShowsAdapterViewHolder(@NonNull View itemView) {
+        public TvShowsViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_item_title);
             imgPoster = itemView.findViewById(R.id.img_poster);
             tvDescription = itemView.findViewById(R.id.tv_item_description);
         }
 
-        public void bind(MovieEntity tvShow) {
+        public void bind(TvEntity tvShow) {
             tvTitle.setText(tvShow.getTitle());
             tvDescription.setText(tvShow.getDescription());
             Glide.with(itemView.getContext())
@@ -67,6 +69,7 @@ public class TvShowsAdapter extends RecyclerView.Adapter<TvShowsAdapter.TvShowsA
                     .into(imgPoster);
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(itemView.getContext(), DetailMovieActivity.class);
+                intent.putExtra(DetailMovieActivity.EXTRA_TYPE, "tv");
                 intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, tvShow);
                 itemView.getContext().startActivity(intent);
             });

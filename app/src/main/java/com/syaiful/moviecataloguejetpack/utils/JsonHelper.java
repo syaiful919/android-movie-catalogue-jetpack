@@ -1,6 +1,7 @@
 package com.syaiful.moviecataloguejetpack.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.syaiful.moviecataloguejetpack.data.source.remote.response.MovieResponse;
 
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class JsonHelper {
     private Context context;
@@ -33,8 +35,8 @@ public class JsonHelper {
         }
     }
 
-    public ArrayList<MovieResponse> loadMovies(){
-        ArrayList<MovieResponse> list = new ArrayList<>();
+    public List<MovieResponse> loadMovies(){
+        List<MovieResponse> list = new ArrayList<>();
         try{
             String json = parsingFileToString("movies.json");
             if(json != null){
@@ -44,12 +46,11 @@ public class JsonHelper {
                     JSONObject movie = listArray.getJSONObject(i);
 
                     String id = movie.getString("id");
-                    String type = movie.getString("type");
                     String title = movie.getString("title");
                     String description = movie.getString("description");
                     String posterPath = movie.getString("posterPath");
 
-                    MovieResponse movieResponse = new MovieResponse(id, type, title, description, posterPath);
+                    MovieResponse movieResponse = new MovieResponse(id, title, description, posterPath);
                     list.add(movieResponse);
                 }
             }
@@ -59,8 +60,8 @@ public class JsonHelper {
         return list;
     }
 
-    public ArrayList<MovieResponse> loadTvShows(){
-        ArrayList<MovieResponse> list = new ArrayList<>();
+    public List<MovieResponse> loadTvShows(){
+        List<MovieResponse> list = new ArrayList<>();
         try{
             String json = parsingFileToString("tv_shows.json");
             if(json != null){
@@ -70,18 +71,18 @@ public class JsonHelper {
                     JSONObject tv = listArray.getJSONObject(i);
 
                     String id = tv.getString("id");
-                    String type = tv.getString("type");
                     String title = tv.getString("title");
                     String description = tv.getString("description");
                     String posterPath = tv.getString("posterPath");
 
-                    MovieResponse movieResponse = new MovieResponse(id, type, title, description, posterPath);
+                    MovieResponse movieResponse = new MovieResponse(id, title, description, posterPath);
                     list.add(movieResponse);
                 }
             }
         } catch (JSONException e){
             e.printStackTrace();
         }
+
         return list;
     }
 
@@ -94,12 +95,11 @@ public class JsonHelper {
                 JSONObject responseObject = new JSONObject(result);
 
                 String id = responseObject.getString("id");
-                String type = responseObject.getString("type");
                 String title = responseObject.getString("title");
                 String description = responseObject.getString("description");
                 String posterPath = responseObject.getString("posterPath");
 
-                movieResponse = new MovieResponse(id, type, title, description, posterPath);
+                movieResponse = new MovieResponse(id, title, description, posterPath);
             }
         } catch (JSONException e){
             e.printStackTrace();
@@ -116,12 +116,11 @@ public class JsonHelper {
                 JSONObject responseObject = new JSONObject(result);
 
                 String id = responseObject.getString("id");
-                String type = responseObject.getString("type");
                 String title = responseObject.getString("title");
                 String description = responseObject.getString("description");
                 String posterPath = responseObject.getString("posterPath");
 
-                movieResponse = new MovieResponse(id, type, title, description, posterPath);
+                movieResponse = new MovieResponse(id, title, description, posterPath);
             }
         } catch (JSONException e){
             e.printStackTrace();

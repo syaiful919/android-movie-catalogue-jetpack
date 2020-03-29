@@ -1,18 +1,24 @@
 package com.syaiful.moviecataloguejetpack.data.source.remote;
 
 import android.os.Handler;
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.syaiful.moviecataloguejetpack.data.source.remote.response.MovieResponse;
 import com.syaiful.moviecataloguejetpack.utils.EspressoIdlingResource;
 import com.syaiful.moviecataloguejetpack.utils.JsonHelper;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RemoteDataSource {
     private static RemoteDataSource INSTANCE;
     private JsonHelper jsonHelper;
     private Handler handler = new Handler();
     private final long SERVICE_LATENCY_IN_MILLIS = 2000;
+
+
 
     private RemoteDataSource(JsonHelper jsonHelper){
         this.jsonHelper = jsonHelper;
@@ -25,51 +31,26 @@ public class RemoteDataSource {
         return INSTANCE;
     }
 
-    public void getMovies(LoadMoviesCallback callback){
+    public LiveData<ApiResponse<List<MovieResponse>>> getMovies(){
         EspressoIdlingResource.increment();
+        MutableLiveData<ApiResponse<List<MovieResponse>>> resultMovies = new MutableLiveData<>();
         handler.postDelayed(()->{
-            callback.onMoviesReceived(jsonHelper.loadMovies());
+            resultMovies.setValue(ApiResponse.success(jsonHelper.loadMovies()));
             EspressoIdlingResource.decrement();
         }, SERVICE_LATENCY_IN_MILLIS);
+        return resultMovies;
     }
 
-    public void getTvShows(LoadTvShowsCallback callback){
+    public LiveData<ApiResponse<List<MovieResponse>>> getTvShows(){
         EspressoIdlingResource.increment();
+        MutableLiveData<ApiResponse<List<MovieResponse>>> resultTvShows = new MutableLiveData<>();
         handler.postDelayed(()->{
-            callback.onTvShowsReceived(jsonHelper.loadTvShows());
+            resultTvShows.setValue(ApiResponse.success(jsonHelper.loadTvShows()));
             EspressoIdlingResource.decrement();
         },SERVICE_LATENCY_IN_MILLIS);
+        return resultTvShows;
     }
 
-    public void getMovie(String id, LoadMovieCallback callback){
-        EspressoIdlingResource.increment();
-        handler.postDelayed(()->{
-            callback.onMovieReceived(jsonHelper.loadMovie(id));
-            EspressoIdlingResource.decrement();
-        }, SERVICE_LATENCY_IN_MILLIS);
-    }
 
-    public void getTvShow(String id, LoadTvShowCallback callback){
-        EspressoIdlingResource.increment();
-        handler.postDelayed(()->{
-            callback.onTvShowReceived(jsonHelper.loadTvShow(id));
-            EspressoIdlingResource.decrement();
-        }, SERVICE_LATENCY_IN_MILLIS);
-    }
 
-    public interface LoadMoviesCallback{
-        void onMoviesReceived(ArrayList<MovieResponse> movieResponses);
-    }
-
-    public interface LoadTvShowsCallback{
-        void onTvShowsReceived(ArrayList<MovieResponse> tvShowResponses);
-    }
-
-    public interface LoadMovieCallback{
-        void onMovieReceived(MovieResponse movie);
-    }
-
-    public interface LoadTvShowCallback{
-        void onTvShowReceived(MovieResponse tvShow);
-    }
 }

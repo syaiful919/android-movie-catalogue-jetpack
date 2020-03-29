@@ -1,10 +1,12 @@
 package com.syaiful.moviecataloguejetpack.ui.tv_shows_section;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,11 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.syaiful.moviecataloguejetpack.R;
-import com.syaiful.moviecataloguejetpack.data.MovieEntity;
 import com.syaiful.moviecataloguejetpack.viewmodel.ViewModelFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TvShowsFragment extends Fragment {
     private RecyclerView rvMovies;
@@ -51,11 +49,26 @@ public class TvShowsFragment extends Fragment {
             TvShowsViewModel viewModel = new ViewModelProvider(this, factory).get(TvShowsViewModel.class);
 
             TvShowsAdapter adapter = new TvShowsAdapter();
-            progressBar.setVisibility(View.VISIBLE);
-            viewModel.getTvShows().observe(this, tvShow -> {
-                progressBar.setVisibility(View.GONE);
-                adapter.setTvShows(tvShow);
-                adapter.notifyDataSetChanged();
+
+            viewModel.getTvShows().observe(this, tvShows -> {
+                if(tvShows != null){
+                    switch (tvShows.status){
+                        case LOADING:
+                            progressBar.setVisibility(View.VISIBLE);
+                            break;
+                        case SUCCESS:
+                            if(tvShows.data != null){
+                                progressBar.setVisibility(View.GONE);
+                                adapter.setTvShows(tvShows.data);
+                                adapter.notifyDataSetChanged();
+                            }
+                            break;
+                        case ERROR:
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
             });
 
             rvMovies.setLayoutManager(new LinearLayoutManager(getContext()));
