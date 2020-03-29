@@ -81,7 +81,7 @@ public class MovieCatalogueTest {
     }
 
     @Test
-    public void loadFavMovies(){
+    public void loadFavMovies() {
         onView(withId(R.id.rv_movies)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.txt_name_detail)).check(matches(isDisplayed()));
         onView(withId(R.id.action_fav)).perform(click());
@@ -97,7 +97,7 @@ public class MovieCatalogueTest {
     }
 
     @Test
-    public void loadFavTvShows(){
+    public void loadFavTvShows() {
         onView(ViewMatchers.withId(R.id.navigation_tv)).perform(click());
         onView(withId(R.id.rv_tv_shows)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.txt_name_detail)).check(matches(isDisplayed()));

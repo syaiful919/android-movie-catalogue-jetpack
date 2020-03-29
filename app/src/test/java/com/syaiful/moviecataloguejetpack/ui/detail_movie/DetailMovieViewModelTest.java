@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.data.source.MovieCatalogueRepository;
+import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.data.source.local.entity.TvEntity;
 import com.syaiful.moviecataloguejetpack.utils.DummyData;
 
@@ -16,8 +16,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -65,7 +63,7 @@ public class DetailMovieViewModelTest {
     }
 
     @Test
-    public void getSelectedTvShow(){
+    public void getSelectedTvShow() {
         MutableLiveData<TvEntity> tvShowEx = new MutableLiveData<>();
         tvShowEx.setValue(dummyTvShow);
 

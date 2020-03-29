@@ -11,7 +11,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     private MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
     private AppExecutors mExecutors;
 
-    public NetworkBoundResource(AppExecutors appExecutors){
+    public NetworkBoundResource(AppExecutors appExecutors) {
         this.mExecutors = appExecutors;
         result.setValue(Resource.loading(null));
 
@@ -19,7 +19,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
         result.addSource(dbSource, data -> {
             result.removeSource(dbSource);
-            if(shouldFetch(data)){
+            if (shouldFetch(data)) {
                 fetchFromNetwork(dbSource);
             } else {
                 result.addSource(dbSource, newData -> result.setValue(Resource.success(newData)));
@@ -27,7 +27,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         });
     }
 
-    protected void onFetchFailed(){
+    protected void onFetchFailed() {
 
     }
 
@@ -39,7 +39,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
     protected abstract void saveCallResult(RequestType data);
 
-    private void fetchFromNetwork(LiveData<ResultType> dbSource){
+    private void fetchFromNetwork(LiveData<ResultType> dbSource) {
         LiveData<ApiResponse<RequestType>> apiResponse = createCall();
 
         result.addSource(dbSource, newData ->
@@ -50,7 +50,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
             result.removeSource(apiResponse);
             result.removeSource(dbSource);
 
-            switch (response.status){
+            switch (response.status) {
                 case SUCCESS:
                     mExecutors.diskIO().execute(() -> {
                         saveCallResult(response.body);
@@ -76,7 +76,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         });
     }
 
-    public LiveData<Resource<ResultType>> asLiveData(){
+    public LiveData<Resource<ResultType>> asLiveData() {
         return result;
     }
 }

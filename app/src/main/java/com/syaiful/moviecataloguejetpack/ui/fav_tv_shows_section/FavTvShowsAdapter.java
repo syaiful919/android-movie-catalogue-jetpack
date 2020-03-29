@@ -1,5 +1,6 @@
 package com.syaiful.moviecataloguejetpack.ui.fav_tv_shows_section;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,26 +9,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.syaiful.moviecataloguejetpack.R;
-import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.data.source.local.entity.TvEntity;
 import com.syaiful.moviecataloguejetpack.ui.detail_movie.DetailMovieActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+public class FavTvShowsAdapter extends PagedListAdapter<TvEntity, FavTvShowsAdapter.FavTvShowsViewHolder> {
 
-public class FavTvShowsAdapter extends RecyclerView.Adapter<FavTvShowsAdapter.FavTvShowsViewHolder> {
-    private List<TvEntity> listTvShows = new ArrayList<>();
-
-    void setFavTvShows(List<TvEntity> listTvShows){
-        if(listTvShows == null) return;
-        this.listTvShows.clear();
-        this.listTvShows.addAll(listTvShows);
+    FavTvShowsAdapter() {
+        super(DIFF_CALLBACK);
     }
+
+    private static DiffUtil.ItemCallback<TvEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<TvEntity>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull TvEntity oldItem, @NonNull TvEntity newItem) {
+                    return oldItem.getTvId().equals(newItem.getTvId());
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(@NonNull TvEntity oldItem, @NonNull TvEntity newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 
 
     @NonNull
@@ -39,13 +49,10 @@ public class FavTvShowsAdapter extends RecyclerView.Adapter<FavTvShowsAdapter.Fa
 
     @Override
     public void onBindViewHolder(@NonNull FavTvShowsViewHolder holder, int position) {
-        TvEntity tv = listTvShows.get(position);
-        holder.bind(tv);
-    }
-
-    @Override
-    public int getItemCount() {
-        return listTvShows.size();
+        TvEntity tv = getItem(position);
+        if (tv != null) {
+            holder.bind(tv);
+        }
     }
 
     public class FavTvShowsViewHolder extends RecyclerView.ViewHolder {
@@ -70,7 +77,7 @@ public class FavTvShowsAdapter extends RecyclerView.Adapter<FavTvShowsAdapter.Fa
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(itemView.getContext(), DetailMovieActivity.class);
                 intent.putExtra(DetailMovieActivity.EXTRA_TYPE, "tv");
-                intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, tv );
+                intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, tv);
                 itemView.getContext().startActivity(intent);
             });
 

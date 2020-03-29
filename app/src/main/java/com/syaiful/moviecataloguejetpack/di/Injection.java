@@ -10,7 +10,7 @@ import com.syaiful.moviecataloguejetpack.utils.AppExecutors;
 import com.syaiful.moviecataloguejetpack.utils.JsonHelper;
 
 public class Injection {
-    public static MovieCatalogueRepository provideRepository(Context context){
+    public static MovieCatalogueRepository provideRepository(Context context) {
         LocalDatabase database = LocalDatabase.getInstance(context);
 
         RemoteDataSource remoteDataSource = RemoteDataSource.getInstance(new JsonHelper(context));

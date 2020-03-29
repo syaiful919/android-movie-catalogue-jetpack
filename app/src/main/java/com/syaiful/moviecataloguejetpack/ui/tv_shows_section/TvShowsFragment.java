@@ -1,7 +1,6 @@
 package com.syaiful.moviecataloguejetpack.ui.tv_shows_section;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,15 +50,15 @@ public class TvShowsFragment extends Fragment {
             TvShowsAdapter adapter = new TvShowsAdapter();
 
             viewModel.getTvShows().observe(this, tvShows -> {
-                if(tvShows != null){
-                    switch (tvShows.status){
+                if (tvShows != null) {
+                    switch (tvShows.status) {
                         case LOADING:
                             progressBar.setVisibility(View.VISIBLE);
                             break;
                         case SUCCESS:
-                            if(tvShows.data != null){
+                            if (tvShows.data != null) {
                                 progressBar.setVisibility(View.GONE);
-                                adapter.setTvShows(tvShows.data);
+                                adapter.submitList(tvShows.data);
                                 adapter.notifyDataSetChanged();
                             }
                             break;

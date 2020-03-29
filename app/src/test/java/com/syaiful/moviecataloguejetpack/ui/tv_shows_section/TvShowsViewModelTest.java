@@ -3,11 +3,10 @@ package com.syaiful.moviecataloguejetpack.ui.tv_shows_section;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.paging.PagedList;
 
-import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.data.source.MovieCatalogueRepository;
 import com.syaiful.moviecataloguejetpack.data.source.local.entity.TvEntity;
-import com.syaiful.moviecataloguejetpack.utils.DummyData;
 import com.syaiful.moviecataloguejetpack.vo.Resource;
 
 import org.junit.Before;
@@ -36,7 +35,10 @@ public class TvShowsViewModelTest {
     private MovieCatalogueRepository repository;
 
     @Mock
-    private Observer<Resource<List<TvEntity>>> observer;
+    private Observer<Resource<PagedList<TvEntity>>> observer;
+
+    @Mock
+    private PagedList<TvEntity> pagedList;
 
     @Before
     public void setUp() {
@@ -45,14 +47,15 @@ public class TvShowsViewModelTest {
 
     @Test
     public void getTvShows() {
-        Resource<List<TvEntity>> dummyTvShows = Resource.success(DummyData.generateDummyTvShows());
-        MutableLiveData<Resource<List<TvEntity>>> movie = new MutableLiveData<>();
+        Resource<PagedList<TvEntity>> dummyTvShows = Resource.success(pagedList);
+        when(dummyTvShows.data.size()).thenReturn(5);
+        MutableLiveData<Resource<PagedList<TvEntity>>> movie = new MutableLiveData<>();
         movie.setValue(dummyTvShows);
 
         when(repository.getTvShows()).thenReturn(movie);
         List<TvEntity> tvShowsList = viewModel.getTvShows().getValue().data;
         assertNotNull(tvShowsList);
-        assertEquals(10, tvShowsList.size());
+        assertEquals(5, tvShowsList.size());
 
         viewModel.getTvShows().observeForever(observer);
         verify(observer).onChanged(dummyTvShows);

@@ -1,7 +1,6 @@
 package com.syaiful.moviecataloguejetpack.data.source.remote;
 
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,38 +18,36 @@ public class RemoteDataSource {
     private final long SERVICE_LATENCY_IN_MILLIS = 2000;
 
 
-
-    private RemoteDataSource(JsonHelper jsonHelper){
+    private RemoteDataSource(JsonHelper jsonHelper) {
         this.jsonHelper = jsonHelper;
     }
 
-    public static RemoteDataSource getInstance(JsonHelper jsonHelper){
-        if(INSTANCE == null){
+    public static RemoteDataSource getInstance(JsonHelper jsonHelper) {
+        if (INSTANCE == null) {
             INSTANCE = new RemoteDataSource(jsonHelper);
         }
         return INSTANCE;
     }
 
-    public LiveData<ApiResponse<List<MovieResponse>>> getMovies(){
+    public LiveData<ApiResponse<List<MovieResponse>>> getMovies() {
         EspressoIdlingResource.increment();
         MutableLiveData<ApiResponse<List<MovieResponse>>> resultMovies = new MutableLiveData<>();
-        handler.postDelayed(()->{
+        handler.postDelayed(() -> {
             resultMovies.setValue(ApiResponse.success(jsonHelper.loadMovies()));
             EspressoIdlingResource.decrement();
         }, SERVICE_LATENCY_IN_MILLIS);
         return resultMovies;
     }
 
-    public LiveData<ApiResponse<List<MovieResponse>>> getTvShows(){
+    public LiveData<ApiResponse<List<MovieResponse>>> getTvShows() {
         EspressoIdlingResource.increment();
         MutableLiveData<ApiResponse<List<MovieResponse>>> resultTvShows = new MutableLiveData<>();
-        handler.postDelayed(()->{
+        handler.postDelayed(() -> {
             resultTvShows.setValue(ApiResponse.success(jsonHelper.loadTvShows()));
             EspressoIdlingResource.decrement();
-        },SERVICE_LATENCY_IN_MILLIS);
+        }, SERVICE_LATENCY_IN_MILLIS);
         return resultTvShows;
     }
-
 
 
 }

@@ -2,7 +2,8 @@ package com.syaiful.moviecataloguejetpack.data.source;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
 
 import com.syaiful.moviecataloguejetpack.data.source.local.LocalDataSource;
 import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
@@ -22,7 +23,7 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
     private final LocalDataSource localDataSource;
     private final AppExecutors appExecutors;
 
-    public FakeMovieCatalogueRepository(@NonNull RemoteDataSource remoteDataSource, @NonNull LocalDataSource localDataSource, AppExecutors appExecutors){
+    public FakeMovieCatalogueRepository(@NonNull RemoteDataSource remoteDataSource, @NonNull LocalDataSource localDataSource, AppExecutors appExecutors) {
         this.remoteDataSource = remoteDataSource;
         this.localDataSource = localDataSource;
         this.appExecutors = appExecutors;
@@ -30,16 +31,21 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
 
 
     @Override
-    public LiveData<Resource<List<MovieEntity>>> getMovies(){
-        return new NetworkBoundResource<List<MovieEntity>, List<MovieResponse>>(appExecutors){
+    public LiveData<Resource<PagedList<MovieEntity>>> getMovies() {
+        return new NetworkBoundResource<PagedList<MovieEntity>, List<MovieResponse>>(appExecutors) {
 
             @Override
-            protected LiveData<List<MovieEntity>> loadFromDB() {
-                return localDataSource.getMovies();
+            protected LiveData<PagedList<MovieEntity>> loadFromDB() {
+                PagedList.Config config = new PagedList.Config.Builder()
+                        .setEnablePlaceholders(false)
+                        .setInitialLoadSizeHint(4)
+                        .setPageSize(4)
+                        .build();
+                return new LivePagedListBuilder<>(localDataSource.getMovies(), config).build();
             }
 
             @Override
-            protected Boolean shouldFetch(List<MovieEntity> data) {
+            protected Boolean shouldFetch(PagedList<MovieEntity> data) {
                 return (data == null) || (data.size() == 0);
             }
 
@@ -51,7 +57,7 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
             @Override
             protected void saveCallResult(List<MovieResponse> data) {
                 List<MovieEntity> movieList = new ArrayList<>();
-                for(MovieResponse response : data){
+                for (MovieResponse response : data) {
                     MovieEntity movie = new MovieEntity(
                             response.getId(),
                             response.getTitle(),
@@ -67,16 +73,21 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
     }
 
     @Override
-    public LiveData<Resource<List<TvEntity>>> getTvShows(){
-        return new NetworkBoundResource<List<TvEntity>, List<MovieResponse>>(appExecutors){
+    public LiveData<Resource<PagedList<TvEntity>>> getTvShows() {
+        return new NetworkBoundResource<PagedList<TvEntity>, List<MovieResponse>>(appExecutors) {
 
             @Override
-            protected LiveData<List<TvEntity>> loadFromDB() {
-                return localDataSource.getTvShows();
+            protected LiveData<PagedList<TvEntity>> loadFromDB() {
+                PagedList.Config config = new PagedList.Config.Builder()
+                        .setEnablePlaceholders(false)
+                        .setInitialLoadSizeHint(4)
+                        .setPageSize(4)
+                        .build();
+                return new LivePagedListBuilder<>(localDataSource.getTvShows(), config).build();
             }
 
             @Override
-            protected Boolean shouldFetch(List<TvEntity> data) {
+            protected Boolean shouldFetch(PagedList<TvEntity> data) {
                 return (data == null) || (data.size() == 0);
             }
 
@@ -88,7 +99,7 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
             @Override
             protected void saveCallResult(List<MovieResponse> data) {
                 List<TvEntity> tvShowList = new ArrayList<>();
-                for(MovieResponse response : data){
+                for (MovieResponse response : data) {
                     TvEntity tvShow = new TvEntity(
                             response.getId(),
                             response.getTitle(),
@@ -104,13 +115,23 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
     }
 
     @Override
-    public LiveData<List<MovieEntity>> getFavMovies() {
-        return localDataSource.getFavMovies();
+    public LiveData<PagedList<MovieEntity>> getFavMovies() {
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(4)
+                .setPageSize(4)
+                .build();
+        return new LivePagedListBuilder<>(localDataSource.getFavMovies(), config).build();
     }
 
     @Override
-    public LiveData<List<TvEntity>> getFavTvShows() {
-        return localDataSource.getFavTvShows();
+    public LiveData<PagedList<TvEntity>> getFavTvShows() {
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(4)
+                .setPageSize(4)
+                .build();
+        return new LivePagedListBuilder<>(localDataSource.getFavTvShows(), config).build();
     }
 
     @Override

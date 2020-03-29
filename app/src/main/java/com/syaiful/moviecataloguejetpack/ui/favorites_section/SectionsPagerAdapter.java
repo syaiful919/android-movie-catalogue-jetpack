@@ -1,7 +1,5 @@
 package com.syaiful.moviecataloguejetpack.ui.favorites_section;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -12,8 +10,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.syaiful.moviecataloguejetpack.R;
 import com.syaiful.moviecataloguejetpack.ui.fav_movies_section.FavMoviesFragment;
 import com.syaiful.moviecataloguejetpack.ui.fav_tv_shows_section.FavTvShowsFragment;
-import com.syaiful.moviecataloguejetpack.ui.movies_section.MoviesFragment;
-import com.syaiful.moviecataloguejetpack.ui.tv_shows_section.TvShowsFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @StringRes

@@ -22,10 +22,10 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         this.movieCatalogueRepository = movieCatalogueRepository;
     }
 
-    public static ViewModelFactory getInstance(Context context){
-        if(INSTANCE == null){
-            synchronized (ViewModelFactory.class){
-                if(INSTANCE == null){
+    public static ViewModelFactory getInstance(Context context) {
+        if (INSTANCE == null) {
+            synchronized (ViewModelFactory.class) {
+                if (INSTANCE == null) {
                     INSTANCE = new ViewModelFactory(Injection.provideRepository(context));
                 }
             }
@@ -36,16 +36,16 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     @SuppressWarnings("unchecked")
     @NonNull
     @Override
-    public <T extends ViewModel> T create(@NonNull Class<T> modelClass){
-        if(modelClass.isAssignableFrom(MoviesViewModel.class)){
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+        if (modelClass.isAssignableFrom(MoviesViewModel.class)) {
             return (T) new MoviesViewModel(movieCatalogueRepository);
-        } else if(modelClass.isAssignableFrom(TvShowsViewModel.class)){
+        } else if (modelClass.isAssignableFrom(TvShowsViewModel.class)) {
             return (T) new TvShowsViewModel(movieCatalogueRepository);
-        } else if(modelClass.isAssignableFrom(DetailMovieViewModel.class)){
+        } else if (modelClass.isAssignableFrom(DetailMovieViewModel.class)) {
             return (T) new DetailMovieViewModel(movieCatalogueRepository);
-        } else if(modelClass.isAssignableFrom(FavMoviesViewModel.class)){
+        } else if (modelClass.isAssignableFrom(FavMoviesViewModel.class)) {
             return (T) new FavMoviesViewModel(movieCatalogueRepository);
-        } else if(modelClass.isAssignableFrom(FavTvShowsViewModel.class)){
+        } else if (modelClass.isAssignableFrom(FavTvShowsViewModel.class)) {
             return (T) new FavTvShowsViewModel(movieCatalogueRepository);
         }
 

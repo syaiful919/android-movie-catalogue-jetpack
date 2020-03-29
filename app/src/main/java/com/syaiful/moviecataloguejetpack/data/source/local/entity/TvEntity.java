@@ -29,7 +29,7 @@ public class TvEntity implements Parcelable {
     private boolean favorited = false;
 
     @Ignore
-    public TvEntity(){
+    public TvEntity() {
 
     }
 

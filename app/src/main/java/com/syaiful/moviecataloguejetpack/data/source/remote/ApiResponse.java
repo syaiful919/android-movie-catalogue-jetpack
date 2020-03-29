@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import static com.syaiful.moviecataloguejetpack.data.source.remote.StatusResponse.EMPTY;
-import static com.syaiful.moviecataloguejetpack.data.source.remote.StatusResponse.SUCCESS;
 import static com.syaiful.moviecataloguejetpack.data.source.remote.StatusResponse.ERROR;
+import static com.syaiful.moviecataloguejetpack.data.source.remote.StatusResponse.SUCCESS;
 
 
 public class ApiResponse<T> {
@@ -18,21 +18,21 @@ public class ApiResponse<T> {
     @Nullable
     public final T body;
 
-    public ApiResponse(@NonNull StatusResponse status, @Nullable T body, @Nullable String message){
+    public ApiResponse(@NonNull StatusResponse status, @Nullable T body, @Nullable String message) {
         this.status = status;
         this.body = body;
         this.message = message;
     }
 
-    public static <T> ApiResponse<T> success(@Nullable T body){
+    public static <T> ApiResponse<T> success(@Nullable T body) {
         return new ApiResponse<>(SUCCESS, body, null);
     }
 
-    public static <T> ApiResponse<T> empty(String msg, @Nullable T body){
+    public static <T> ApiResponse<T> empty(String msg, @Nullable T body) {
         return new ApiResponse<>(EMPTY, body, msg);
     }
 
-    public static <T> ApiResponse<T> error(String msg, @Nullable T body){
+    public static <T> ApiResponse<T> error(String msg, @Nullable T body) {
         return new ApiResponse<>(ERROR, body, msg);
     }
 }

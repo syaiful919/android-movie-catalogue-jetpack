@@ -3,10 +3,10 @@ package com.syaiful.moviecataloguejetpack.ui.movies_section;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.paging.PagedList;
 
-import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.data.source.MovieCatalogueRepository;
-import com.syaiful.moviecataloguejetpack.utils.DummyData;
+import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.vo.Resource;
 
 import org.junit.Before;
@@ -34,7 +34,10 @@ public class MoviesViewModelTest {
     private MovieCatalogueRepository repository;
 
     @Mock
-    private Observer<Resource<List<MovieEntity>>> observer;
+    private Observer<Resource<PagedList<MovieEntity>>> observer;
+
+    @Mock
+    private PagedList<MovieEntity> pagedList;
 
     @Before
     public void setUp() {
@@ -43,15 +46,16 @@ public class MoviesViewModelTest {
 
     @Test
     public void getMovies() {
-        Resource<List<MovieEntity>> dummyMovies = Resource.success(DummyData.generateDummyMovies());
-        MutableLiveData<Resource<List<MovieEntity>>> movies = new MutableLiveData<>();
+        Resource<PagedList<MovieEntity>> dummyMovies = Resource.success(pagedList);
+        when(dummyMovies.data.size()).thenReturn(5);
+        MutableLiveData<Resource<PagedList<MovieEntity>>> movies = new MutableLiveData<>();
         movies.setValue(dummyMovies);
 
         when(repository.getMovies()).thenReturn(movies);
         List<MovieEntity> movieList = viewModel.getMovies().getValue().data;
         verify(repository).getMovies();
         assertNotNull(movieList);
-        assertEquals(10, movieList.size());
+        assertEquals(5, movieList.size());
 
         viewModel.getMovies().observeForever(observer);
         verify(observer).onChanged(dummyMovies);

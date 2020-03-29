@@ -1,7 +1,6 @@
 package com.syaiful.moviecataloguejetpack.ui.detail_movie;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,12 +71,12 @@ public class DetailMovieActivity extends AppCompatActivity {
         }
 
         progressBar.setVisibility(View.VISIBLE);
-        if(type.equals("movie")){
+        if (type.equals("movie")) {
             viewModel.selectedMovie.observe(this, movie -> {
                 populateDetailMovie(movie);
                 viewVisible();
             });
-        } else if(type.equals("tv")){
+        } else if (type.equals("tv")) {
             viewModel.selectedTv.observe(this, tv -> {
                 populateDetailTV(tv);
                 viewVisible();
@@ -87,14 +86,14 @@ public class DetailMovieActivity extends AppCompatActivity {
 
     }
 
-    private void viewGone(){
+    private void viewGone() {
         tvTitle.setVisibility(View.GONE);
         tvDescription.setVisibility(View.GONE);
         imgPoster.setVisibility(View.GONE);
         tvOverview.setVisibility(View.GONE);
     }
 
-    private void viewVisible(){
+    private void viewVisible() {
         tvTitle.setVisibility(View.VISIBLE);
         tvDescription.setVisibility(View.VISIBLE);
         imgPoster.setVisibility(View.VISIBLE);
@@ -122,14 +121,14 @@ public class DetailMovieActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail_menu, menu);
         this.menu = menu;
         progressBar.setVisibility(View.VISIBLE);
-        if(type.equals("movie")){
+        if (type.equals("movie")) {
             state = movie.isFavorited();
             setFavState(state);
-        } else if(type.equals("tv")){
+        } else if (type.equals("tv")) {
             state = tv.isFavorited();
             setFavState(state);
         }
@@ -142,10 +141,10 @@ public class DetailMovieActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
-        } else if(item.getItemId() == R.id.action_fav){
-            if(type.equals("movie")){
+        } else if (item.getItemId() == R.id.action_fav) {
+            if (type.equals("movie")) {
                 viewModel.setFavMovie();
-            } else if(type.equals("tv")){
+            } else if (type.equals("tv")) {
                 viewModel.setFavTvShow();
             }
 
@@ -156,10 +155,10 @@ public class DetailMovieActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setFavState(boolean state){
-        if(menu == null) return;
+    public void setFavState(boolean state) {
+        if (menu == null) return;
         MenuItem menuItem = menu.findItem(R.id.action_fav);
-        if(state){
+        if (state) {
             menuItem.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_favorite));
         } else {
             menuItem.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border));

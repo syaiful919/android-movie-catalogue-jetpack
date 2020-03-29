@@ -29,7 +29,7 @@ public class MovieEntity implements Parcelable {
     private boolean favorited = false;
 
     @Ignore
-    public MovieEntity(){
+    public MovieEntity() {
 
     }
 
@@ -38,7 +38,7 @@ public class MovieEntity implements Parcelable {
         this.title = title;
         this.description = description;
         this.posterPath = posterPath;
-        if(favorited != null){
+        if (favorited != null) {
             this.favorited = favorited;
         }
         this.favorited = favorited;

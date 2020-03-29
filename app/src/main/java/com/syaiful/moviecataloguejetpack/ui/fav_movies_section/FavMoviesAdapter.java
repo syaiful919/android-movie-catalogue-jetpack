@@ -1,5 +1,6 @@
 package com.syaiful.moviecataloguejetpack.ui.fav_movies_section;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -16,17 +19,25 @@ import com.syaiful.moviecataloguejetpack.R;
 import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.ui.detail_movie.DetailMovieActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+public class FavMoviesAdapter extends PagedListAdapter<MovieEntity, FavMoviesAdapter.FavMoviesViewHolder> {
 
-public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavMoviesViewHolder>{
-    private List<MovieEntity> listMovies = new ArrayList<>();
-
-    void setFavMovies(List<MovieEntity> listMovies){
-        if(listMovies == null) return;
-        this.listMovies.clear();
-        this.listMovies.addAll(listMovies);
+    FavMoviesAdapter() {
+        super(DIFF_CALLBACK);
     }
+
+    private static DiffUtil.ItemCallback<MovieEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<MovieEntity>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull MovieEntity oldItem, @NonNull MovieEntity newItem) {
+                    return oldItem.getMovieId().equals(newItem.getMovieId());
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(@NonNull MovieEntity oldItem, @NonNull MovieEntity newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 
     @NonNull
     @Override
@@ -37,13 +48,10 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavM
 
     @Override
     public void onBindViewHolder(@NonNull FavMoviesViewHolder holder, int position) {
-        MovieEntity movie = listMovies.get(position);
-        holder.bind(movie);
-    }
-
-    @Override
-    public int getItemCount() {
-        return listMovies.size();
+        MovieEntity movie = getItem(position);
+        if (movie != null) {
+            holder.bind(movie);
+        }
     }
 
     public class FavMoviesViewHolder extends RecyclerView.ViewHolder {
@@ -68,7 +76,7 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavM
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(itemView.getContext(), DetailMovieActivity.class);
                 intent.putExtra(DetailMovieActivity.EXTRA_TYPE, "movie");
-                intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, movie );
+                intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, movie);
                 itemView.getContext().startActivity(intent);
             });
 

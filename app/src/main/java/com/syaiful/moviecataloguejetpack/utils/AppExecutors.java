@@ -16,31 +16,32 @@ public class AppExecutors {
     private final Executor mainThread;
 
     @VisibleForTesting
-    public AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread){
+    public AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) {
         this.diskIO = diskIO;
         this.networkIO = networkIO;
         this.mainThread = mainThread;
     }
 
-    public AppExecutors(){
+    public AppExecutors() {
         this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(THREAD_COUNT),
                 new MainThreadExecutor());
     }
 
-    public Executor diskIO(){
+    public Executor diskIO() {
         return diskIO;
     }
 
-    public Executor networkIO(){
+    public Executor networkIO() {
         return networkIO;
     }
 
-    public Executor mainThread(){
+    public Executor mainThread() {
         return mainThread;
     }
 
-    public static class MainThreadExecutor implements Executor{
+    public static class MainThreadExecutor implements Executor {
         private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+
         @Override
         public void execute(@NonNull Runnable command) {
             mainThreadHandler.post(command);

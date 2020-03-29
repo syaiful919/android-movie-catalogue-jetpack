@@ -1,5 +1,6 @@
 package com.syaiful.moviecataloguejetpack.ui.tv_shows_section;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,27 +9,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.syaiful.moviecataloguejetpack.R;
-import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.data.source.local.entity.TvEntity;
 import com.syaiful.moviecataloguejetpack.ui.detail_movie.DetailMovieActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.List;
+public class TvShowsAdapter extends PagedListAdapter<TvEntity, TvShowsAdapter.TvShowsViewHolder> {
 
-public class TvShowsAdapter extends RecyclerView.Adapter<TvShowsAdapter.TvShowsViewHolder> {
-    private List<TvEntity> listTvShows = new ArrayList<>();
-
-    void setTvShows(List<TvEntity> listTvShows) {
-        if (listTvShows == null) return;
-        this.listTvShows.clear();
-        this.listTvShows.addAll(listTvShows);
+    TvShowsAdapter() {
+        super(DIFF_CALLBACK);
     }
+
+    private static DiffUtil.ItemCallback<TvEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<TvEntity>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull TvEntity oldItem, @NonNull TvEntity newItem) {
+                    return oldItem.getTvId().equals(newItem.getTvId());
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(@NonNull TvEntity oldItem, @NonNull TvEntity newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 
     @NonNull
     @Override
@@ -39,13 +48,10 @@ public class TvShowsAdapter extends RecyclerView.Adapter<TvShowsAdapter.TvShowsV
 
     @Override
     public void onBindViewHolder(@NonNull TvShowsViewHolder holder, int position) {
-        TvEntity tvShow = listTvShows.get(position);
-        holder.bind(tvShow);
-    }
-
-    @Override
-    public int getItemCount() {
-        return listTvShows.size();
+        TvEntity tvShow = getItem(position);
+        if (tvShow != null) {
+            holder.bind(tvShow);
+        }
     }
 
     public class TvShowsViewHolder extends RecyclerView.ViewHolder {
