@@ -14,8 +14,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -44,6 +47,7 @@ public class DetailMovieViewModelTest {
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         viewModelMovie = new DetailMovieViewModel(repository);
         viewModelMovie.setId(movieId);
 
