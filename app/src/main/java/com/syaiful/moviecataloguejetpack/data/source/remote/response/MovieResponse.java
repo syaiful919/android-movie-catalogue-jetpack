@@ -1,51 +1,41 @@
-package com.syaiful.moviecataloguejetpack.data;
+package com.syaiful.moviecataloguejetpack.data.source.remote.response;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class MovieEntity implements Parcelable {
+
+public class MovieResponse implements Parcelable {
     private String movieId;
     private String title;
     private String description;
     private String posterPath;
-    private String type;
 
-    public MovieEntity(String _Id, String type, String title, String description, String posterPath) {
+    public MovieResponse(String _Id, String title, String description, String posterPath) {
         this.movieId = _Id;
         this.title = title;
         this.description = description;
         this.posterPath = posterPath;
-        this.type = type;
     }
 
 
-    protected MovieEntity(Parcel in) {
+    protected MovieResponse(Parcel in) {
         movieId = in.readString();
         title = in.readString();
         description = in.readString();
         posterPath = in.readString();
-        type = in.readString();
     }
 
-    public static final Creator<MovieEntity> CREATOR = new Creator<MovieEntity>() {
+    public static final Creator<MovieResponse> CREATOR = new Creator<MovieResponse>() {
         @Override
-        public MovieEntity createFromParcel(Parcel in) {
-            return new MovieEntity(in);
+        public MovieResponse createFromParcel(Parcel in) {
+            return new MovieResponse(in);
         }
 
         @Override
-        public MovieEntity[] newArray(int size) {
-            return new MovieEntity[size];
+        public MovieResponse[] newArray(int size) {
+            return new MovieResponse[size];
         }
     };
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getId() {
         return movieId;
@@ -90,6 +80,5 @@ public class MovieEntity implements Parcelable {
         dest.writeString(title);
         dest.writeString(description);
         dest.writeString(posterPath);
-        dest.writeString(type);
     }
 }

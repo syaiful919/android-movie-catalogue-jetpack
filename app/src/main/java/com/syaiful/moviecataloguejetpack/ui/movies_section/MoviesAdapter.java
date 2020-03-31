@@ -1,5 +1,6 @@
 package com.syaiful.moviecataloguejetpack.ui.movies_section;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,25 +9,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.syaiful.moviecataloguejetpack.R;
-import com.syaiful.moviecataloguejetpack.data.MovieEntity;
+import com.syaiful.moviecataloguejetpack.data.source.local.entity.MovieEntity;
 import com.syaiful.moviecataloguejetpack.ui.detail_movie.DetailMovieActivity;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
-    private List<MovieEntity> listMovies = new ArrayList<>();
+public class MoviesAdapter extends PagedListAdapter<MovieEntity, MoviesAdapter.MoviesViewHolder> {
 
-    void setMovies(List<MovieEntity> listMovies) {
-        if (listMovies == null) return;
-        this.listMovies.clear();
-        this.listMovies.addAll(listMovies);
+    MoviesAdapter() {
+        super(DIFF_CALLBACK);
     }
+
+    private static DiffUtil.ItemCallback<MovieEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<MovieEntity>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull MovieEntity oldItem, @NonNull MovieEntity newItem) {
+                    return oldItem.getMovieId().equals(newItem.getMovieId());
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(@NonNull MovieEntity oldItem, @NonNull MovieEntity newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 
     @NonNull
     @Override
@@ -37,13 +49,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder holder, int position) {
-        MovieEntity movie = listMovies.get(position);
-        holder.bind(movie);
-    }
-
-    @Override
-    public int getItemCount() {
-        return listMovies.size();
+        MovieEntity movie = getItem(position);
+        if (movie != null) {
+            holder.bind(movie);
+        }
     }
 
     public class MoviesViewHolder extends RecyclerView.ViewHolder {
@@ -67,6 +76,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
                     .into(imgPoster);
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(itemView.getContext(), DetailMovieActivity.class);
+                intent.putExtra(DetailMovieActivity.EXTRA_TYPE, "movie");
                 intent.putExtra(DetailMovieActivity.EXTRA_MOVIE, movie);
                 itemView.getContext().startActivity(intent);
             });
